@@ -4,7 +4,7 @@ function preload() {
     game.load.image('sky','sky.png');
     game.load.image('ground','platform.png');
     game.load.image('star','star.png');
-    game.load.spritesheet('dude','dude.png',32,48);
+    game.load.spritesheet('isaac','movement.png',32,19);
 }
 var player;
 var platforms;
@@ -42,7 +42,7 @@ function create() {
     ledge.body.immovable = true;
 
 // The player and its settings
-player = game.add.sprite(32, game.world.height - 150, 'dude');
+player = game.add.sprite(32, game.world.height - 150, 'isaac');
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
@@ -53,8 +53,9 @@ player = game.add.sprite(32, game.world.height - 150, 'dude');
     player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
+    player.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
+    player.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
+    player.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
 
 //Contorls
     cursors = game.input.keyboard.createCursorKeys();
@@ -85,21 +86,17 @@ function update() {
     else if(cursors.up.isDown)
     {
         player.body.velocity.y = -150
-        //  Stand still
-        player.animations.stop();
+        player.animations.play('up');
 
-        player.frame = 4;
     } else if(cursors.down.isDown)
     {
-        player.body.velocity.y = 150
-        //  Stand still
-        player.animations.stop();
+        player.body.velocity.y = 150   
+        player.animations.play('up');
 
-        player.frame = 4;
     }
     else{
         player.animations.stop()
-        player.frame = 4;
+        player.frame = 0;
     }
     
     //  Allow the player to jump if they are touching the ground.

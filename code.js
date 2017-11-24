@@ -1,12 +1,14 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1920, 1080, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var world = new World(game);
 
 function preload() {
-    game.load.image('sky','sky.png');
-    game.load.image('ground','platform.png');
-    game.load.image('star','star.png');
-    game.load.spritesheet('isaac','movement.png',32,19);
-    game.load.spritesheet('head','headAnim.png',45,40);
+    game.load.image('bckgrnd','/assets/Background.png');
+    game.load.spritesheet('isaac','/assets/movement.png',32,19);
+    game.load.spritesheet('head','/assets/headAnim.png',45,40);
+    
+    world.setBounds(285, 180, 1355, 720);
 }
+//Hola test
 var head;
 var player;
 var platforms;
@@ -17,34 +19,10 @@ function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  A simple background for our game
-    game.add.sprite(0, 0, 'sky');
-
-    //  The platforms group contains the ground and the 2 ledges we can jump on
-    platforms = game.add.group();
-
-    //  We will enable physics for any object that is created in this group
-    platforms.enableBody = true;
-
-    // Here we create the ground.
-    var ground = platforms.create(0, game.world.height - 64, 'ground');
-
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    ground.scale.setTo(2, 2);
-
-    //  This stops it from falling away when you jump on it
-    ground.body.immovable = true;
-
-    //  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
-
-    ledge.body.immovable = true;
-
-    ledge = platforms.create(-150, 250, 'ground');
-
-    ledge.body.immovable = true;
+    game.add.sprite(0, 0, 'bckgrnd');
 
 // The player and its settings
-player = game.add.sprite(32, game.world.height - 150, 'isaac');
+player = game.add.sprite(960, 540, 'isaac');
 head = game.add.sprite(-9,-35,'head');
 
     //  We need to enable physics on the player

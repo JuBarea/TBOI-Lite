@@ -1,0 +1,24 @@
+Diciembre --
+    1/12/2017-Tener el pj moviendose en la habitacion inicial y tener todos los assets de arte que vayamos a utilizar listos
+        --Juan -> Codigo
+        --Tarald -> encontrar assets y asegurarse de que funcionan bien
+    8/12/2017- Poder disparar balas normales y tener un enemigo basico + sistema de vida
+        --Juan -> Disparar balas + vida
+        --Tarald -> AI de enemigo basico(perseguidor) + muerte y reinicio
+    15/12/2017-Poder cambiar de habitacion + Interactuar con items
+        --Juan -> Cambio de habitacion
+        --Tarald -> Coger items
+    22/12/2017- Poder disparar diferentes tipos de balas y tener diferentes enemigos
+        --Juan -> Crear los diferentes tipos de balas 
+        --Tarald -> Crear varios enemigos diferentes
+    29/12/2017- Asegurarse de la consistencia del codigo y de que no haya fallos quue se hayan acumulado + Crear bosses
+        --Ambos miembros haran lo mismo
+    5/1/2018- Creacion de objetos(bombas/llaves) + generacion de arte de diferentes habitaciones
+        --Juan -> crear bombas y llaves 
+        --Tarald -> crear diferentes habitaciones   
+    12/1/2018- Generar el sistema de creacion ramdom de las habitaciones + cambio de nivel+ menus 
+        --Juan -> Crear el sistema de generacion aleatoria
+        --Tarald -> Menus + cambio de lvl
+        //El juego deberia de estar terminado el dia 12
+    19/1/2018 - Asegurarse de que no haya errores y todo funciona correctamente
+        --Ambos miembros hacen lo mismo

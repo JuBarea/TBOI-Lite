@@ -5,7 +5,9 @@ function preload() {
     game.load.image('ground','platform.png');
     game.load.image('star','star.png');
     game.load.spritesheet('isaac','movement.png',32,19);
+    game.load.spritesheet('head','headAnim.png',45,40);
 }
+var head;
 var player;
 var platforms;
 var cursors;
@@ -43,19 +45,25 @@ function create() {
 
 // The player and its settings
 player = game.add.sprite(32, game.world.height - 150, 'isaac');
+head = game.add.sprite(-9,-35,'head');
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
+    game.physics.arcade.enable(head);
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.body.bounce.y = 0.0;
     player.body.gravity.y = 0;
     player.body.collideWorldBounds = true;
 
-    //  Our two animations, walking left and right.
+    //  Our two animations, walking left, right and up/down.
     player.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
     player.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
     player.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
+
+    //We add the head as a child
+    player.addChild(head);
+    //head.animations.add('left')
 
 //Contorls
     cursors = game.input.keyboard.createCursorKeys();
@@ -75,6 +83,7 @@ function update() {
         player.body.velocity.x = -150;
 
         player.animations.play('left');
+        head.frame = 6;
     }
     else if (cursors.right.isDown)
     {
@@ -82,26 +91,25 @@ function update() {
         player.body.velocity.x = 150;
 
         player.animations.play('right');
+        head.frame = 2;
     } 
     else if(cursors.up.isDown)
     {
         player.body.velocity.y = -150
         player.animations.play('up');
+        head.frame = 4;
 
     } else if(cursors.down.isDown)
     {
         player.body.velocity.y = 150   
         player.animations.play('up');
+        head.frame = 0;
 
     }
     else{
-        player.animations.stop()
+        player.animations.stop();
         player.frame = 0;
+        head.animations.stop();
+        head.frame = 0;
     }
-    
-    //  Allow the player to jump if they are touching the ground.
-    /*if (cursors.up.isDown && player.body.touching.down)
-    {
-        player.body.velocity.y = -350;
-    }*/
 }

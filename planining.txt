@@ -1,0 +1,23 @@
+December --
+    1/12/2017- Main character movable in the main room + art assets
+        --Juan -> Code
+        --Tarald -> Finding art assets and makin sure they work properly
+    8/12/2017- Shooting +Basic Enemy + Hp + Classes
+        --Juan -> Shooting + Pj Hp + Classes
+        --Tarald -> Enemy basic AI + death/restart
+    15/12/2017- Change room + Item interaction
+        --Juan -> Room change
+        --Tarald -> Item interaction
+    22/12/2017- Shoot different types of bullets + different types of enemies
+        --Juan->Bullet types
+        --Tarald-> Create different enemies
+    29/12/2017- Make sure everything works fine (both)
+January
+    5/1/2018- Keys+Bombs + Art for different rooms
+        --Juan->Keys+Bombs
+        --Tarald->Art
+    12/1/2018 procedural map generation + lvl change + menus
+        --Juan -> procedural map generation + lvl change
+        --Tarald->menus
+        //Game should be finished by the 12th
+    19/1/2018 - Make sure everything works fine (both)

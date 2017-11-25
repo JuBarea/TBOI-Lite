@@ -1,18 +1,25 @@
 var game = new Phaser.Game(1920, 1080, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-var world = new World(game);
+
 
 function preload() {
     game.load.image('bckgrnd','/assets/Background.png');
     game.load.spritesheet('isaac','/assets/movement.png',32,19);
     game.load.spritesheet('head','/assets/headAnim.png',45,40);
     
-    world.setBounds(285, 180, 1355, 720);
+    game.world.setBounds(285, 180, 1355, 720);
+    game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
+   
 }
 //Hola test
 var head;
 var player;
 var platforms;
+var movement;
 var cursors;
+var keyW;
+var keyS;
+var keyA;
+var keyD;
 
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
@@ -44,47 +51,60 @@ head = game.add.sprite(-9,-35,'head');
     //head.animations.add('left')
 
 //Contorls
+
     cursors = game.input.keyboard.createCursorKeys();
+    keyW = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    keyA = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    keyS = game.input.keyboard.addKey(Phaser.Keyboard.S);
+    keyD = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    
 }
 
 function update() {
     //  Collide the player and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player, platforms);
-    
-    //  Reset the players velocity (movement)
+
+    move();
+}
+
+function move(){
     player.body.velocity.x = 0;
     player.body.velocity.y = 0;
+    
 
-    if (cursors.left.isDown)
-    {
-        //  Move to the left
-        player.body.velocity.x = -150;
-
-        player.animations.play('left');
-        head.frame = 6;
-    }
-    else if (cursors.right.isDown)
-    {
-        //  Move to the right
-        player.body.velocity.x = 150;
-
-        player.animations.play('right');
-        head.frame = 2;
-    } 
-    else if(cursors.up.isDown)
-    {
-        player.body.velocity.y = -150
-        player.animations.play('up');
-        head.frame = 4;
-
-    } else if(cursors.down.isDown)
-    {
-        player.body.velocity.y = 150   
-        player.animations.play('up');
-        head.frame = 0;
+    if(keyA.isDown || keyD.isDown || keyW.isDown ||keyS.isDown){
+        if (keyA.isDown)
+        {
+            //  Move to the left
+            player.body.velocity.x = -150;
+            player.animations.play('left');
+            head.frame = 6;
+        }
+        if (keyD.isDown)
+        {
+            //  Move to the right
+            player.body.velocity.x = 150;
+            player.animations.play('right');
+            head.frame = 2;
+        } 
+        if(keyW.isDown)
+        {
+            player.body.velocity.y = -150
+            player.animations.play('up');
+            head.frame = 4;
+    
+        }
+        if(keyS.isDown)
+        {
+            player.body.velocity.y = 150   
+            player.animations.play('up');
+            head.frame = 0;
+    
+        }
 
     }
     else{
+        //  Reset the players velocity (movement)
         player.animations.stop();
         player.frame = 0;
         head.animations.stop();

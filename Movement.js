@@ -2,9 +2,7 @@
 function Movement(_player){
 
 
-    this.hola = function(){
-        console.log("hola");
-    }
+    
     var keyW;
     var keyS;
     var keyA;

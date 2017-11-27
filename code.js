@@ -5,22 +5,25 @@ function preload() {
     game.load.image('bckgrnd','/assets/Background.png');
     game.load.spritesheet('isaac','/assets/movement.png',32,19);
     game.load.spritesheet('head','/assets/headAnim.png',45,40);
+    game.load.image('aid','/assets/firstaid.png');
     
     game.world.setBounds(285, 180, 1355, 720);
     game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
    
 }
-//Hola test
-var head;
-var player;
-var platforms;
-var movement;
-var cursors;
-var keyW;
-var keyS;
-var keyA;
-var keyD;
+//Vars
+    var head;
+    var player;
+    var platforms;
+    var movement;
+    var cursors;
+    var keyW;
+    var keyS;
+    var keyA;
+    var keyD;
 
+    var aid = new Bullet('aid',500);
+    
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -28,36 +31,38 @@ function create() {
     //  A simple background for our game
     game.add.sprite(0, 0, 'bckgrnd');
 
-// The player and its settings
-player = game.add.sprite(960, 540, 'isaac');
-head = game.add.sprite(-9,-35,'head');
+    // The player and its settings
+    player = game.add.sprite(960, 540, 'isaac');
+    head = game.add.sprite(-9,-35,'head');
 
     //  We need to enable physics on the player
-    game.physics.arcade.enable(player);
-    game.physics.arcade.enable(head);
+        game.physics.arcade.enable(player);
+        game.physics.arcade.enable(head);
+        //game.physics.arcade.enable(aid);
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.0;
-    player.body.gravity.y = 0;
-    player.body.collideWorldBounds = true;
+        player.body.bounce.y = 0.0;
+        player.body.gravity.y = 0;
+        player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left, right and up/down.
-    player.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
-    player.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
-    player.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
+        player.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
+        player.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
+        player.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
 
     //We add the head as a child
-    player.addChild(head);
-    //head.animations.add('left')
-
-//Contorls
-
-    cursors = game.input.keyboard.createCursorKeys();
-    keyW = game.input.keyboard.addKey(Phaser.Keyboard.W);
-    keyA = game.input.keyboard.addKey(Phaser.Keyboard.A);
-    keyS = game.input.keyboard.addKey(Phaser.Keyboard.S);
-    keyD = game.input.keyboard.addKey(Phaser.Keyboard.D);
+        player.addChild(head);
     
+
+    //Contorls
+        cursors = game.input.keyboard.createCursorKeys();
+        keyW = game.input.keyboard.addKey(Phaser.Keyboard.W);
+        keyA = game.input.keyboard.addKey(Phaser.Keyboard.A);
+        keyS = game.input.keyboard.addKey(Phaser.Keyboard.S);
+        keyD = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    
+    aid.place(500,500);
+    console.log(aid.speed);
 }
 
 function update() {
@@ -65,6 +70,7 @@ function update() {
     var hitPlatform = game.physics.arcade.collide(player, platforms);
 
     move();
+    aid.move("up");
 }
 
 function move(){

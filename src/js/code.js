@@ -4,13 +4,13 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 
 function preload() {
-    game.load.image('bckgrnd','/assets/Background.png');
-    game.load.spritesheet('isaac','/assets/movement.png',32,19);
-    game.load.spritesheet('head','/assets/headAnim.png',45,40);
-    game.load.image('aid','/assets/firstaid.png');
+    game.load.image('bckgrnd','/images/Background.png');
+    game.load.spritesheet('isaac','/images/movement.png',32,19);
+    game.load.spritesheet('head','/images/headAnim.png',45,40);
+    game.load.image('aid','/images/firstaid.png');
     
-    game.world.setBounds(285, 180, 1355, 720);
-    game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
+    //game.world.setBounds(285, 180, 1355, 720);
+    //game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
    
 }
 //Vars
@@ -24,7 +24,7 @@ function preload() {
     var keyA;
     var keyD;
 
-    var aid = new Bullet('aid',500);
+    var aid = new Basic(this.game,200,200,'aid');
     
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
@@ -34,7 +34,7 @@ function create() {
     game.add.sprite(0, 0, 'bckgrnd');
 
     // The player and its settings
-    player = game.add.sprite(960, 540, 'isaac');
+    player = game.add.sprite(400, 300, 'isaac');
     head = game.add.sprite(-9,-35,'head');
 
     //  We need to enable physics on the player
@@ -63,8 +63,13 @@ function create() {
         keyS = game.input.keyboard.addKey(Phaser.Keyboard.S);
         keyD = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
-    aid.place(500,500);
-    console.log(aid.speed);
+    //aid.place(200,200);
+
+    
+    if(aid instanceof Phaser.Sprite)
+        console.log("SIIIIIIIII");
+    else console.log("Noooooooo");
+    aid.hola();
 }
 
 function update() {
@@ -72,7 +77,7 @@ function update() {
     var hitPlatform = game.physics.arcade.collide(player, platforms);
 
     move();
-    aid.move("up");
+    //aid.move("right");
 }
 
 function move(){

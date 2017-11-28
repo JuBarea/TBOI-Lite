@@ -1,48 +1,50 @@
 
-function Basic(key){
-
-    this.key = key;
+function Basic(game,x,y,key){
+    Phaser.Sprite.call(this,game,x,y,key);
     
-    this.hola = function(){
-        console.log("hola");
-    }
+}
+Basic.prototype = Object.create(Phaser.Sprite.prototype); //We make the Basic class inherit from the Sprite Class
+Basic.constructor = Basic;
 
-    this.place = function(x,y){
-        game.add.sprite(x,y, this.key);
-    }
+Basic.prototype.hola = function(){
+    console.log("hola");
 }
 
-//Items that can move
-    function Moveable(key,speed){
 
-        Basic.apply(this,[key]);
+Basic.prototype.place = function(x,y){
+    this.x = x;
+    this.y = y;
+} //A function that places the sprite in the world*/
+
+//Items that can move
+    function Moveable(game,key,speed,x,y){
+
+        Basic.apply(this,[game,key,x,y]);
         this.speed = speed;
     }
 
     //heritage
     Moveable.prototype = Object.create(Basic.prototype);
+    Moveable.constructor = Moveable;
 
-        function Bullet(key,speed){
-            Moveable.apply(this,[key,speed])
+        function Bullet(game,key,x,y,speed){
+            Moveable.apply(this,[game,key,x,y])
 
-            //game.physics.arcade.enable(this);
-
-            //Add deltatime Cant acces body/velocity
+            //Add deltatime
             this.move = function(dir){
                 if(dir == 'up'){
-                    body.velocity.y = -this.speed; 
+                    this.y -= this.speed; 
                 }
                 else if(dir == 'left'){
-                    this.body.velocity.x = -this.speed;
+                    this.x -= this.speed;
                 }
                 else if(dir == 'down'){
-                    this.body.velocity.y = this.speed;
+                    this.y += this.speed;
                 }
                 else if(dir == 'right'){
-                    this.body.velocity.x = this.speed;
+                    this.x += this.speed;
                 }
-            }
-
+            }            
             //collision
         }
 
@@ -118,3 +120,4 @@ function Basic(key){
         }
     //heritage
     Bullet.prototype = Object.create(Moveable.prototype);
+    Bullet.constructor = Bullet;

@@ -14,8 +14,8 @@ function preload() {
    
 }
 //Vars
-    var head;
-    var player;
+    
+    
     var platforms;
     var movement;
     var cursors;
@@ -24,63 +24,42 @@ function preload() {
     var keyA;
     var keyD;
 
-    var aid = new Basic(this.game,200,200,'aid');
+    
+    
     
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    //game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  A simple background for our game
     game.add.sprite(0, 0, 'bckgrnd');
+ 
 
-    // The player and its settings
-    player = game.add.sprite(400, 300, 'isaac');
-    head = game.add.sprite(-9,-35,'head');
+    var head = new Basic(this.game,0,0,'head');
+    var player = new Player(this.game,400,300,'isaac',5,this.head);
 
-    //  We need to enable physics on the player
-        game.physics.arcade.enable(player);
-        game.physics.arcade.enable(head);
-        //game.physics.arcade.enable(aid);
+    player.addChild(head);
+    head.place(0,0);
 
-    //  Player physics properties. Give the little guy a slight bounce.
-        player.body.bounce.y = 0.0;
-        player.body.gravity.y = 0;
-        player.body.collideWorldBounds = true;
-
-    //  Our two animations, walking left, right and up/down.
-        player.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
-        player.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
-        player.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
-
-    //We add the head as a child
-        player.addChild(head);
-    
-
-    //Contorls
-        cursors = game.input.keyboard.createCursorKeys();
-        keyW = game.input.keyboard.addKey(Phaser.Keyboard.W);
-        keyA = game.input.keyboard.addKey(Phaser.Keyboard.A);
-        keyS = game.input.keyboard.addKey(Phaser.Keyboard.S);
-        keyD = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    
-    //aid.place(200,200);
+    //player.body.collideWorldBounds = true;
 
     
-    if(aid instanceof Phaser.Sprite)
-        console.log("SIIIIIIIII");
-    else console.log("Noooooooo");
-    aid.hola();
+
+    var aid = new Bullet(this.game,200,200,'aid',1,'down');  
+    //this.game.world.addChild(aid);
+
+    if(player instanceof Phaser.Sprite)
+        console.log("Yep");
+    else console.log("Nope");
+    player.hola();
+    console.log(player.speed);
 }
 
 function update() {
-    //  Collide the player and the stars with the platforms
-    var hitPlatform = game.physics.arcade.collide(player, platforms);
-
-    move();
-    //aid.move("right");
+    
 }
 
-function move(){
+/*function move(){
     player.body.velocity.x = 0;
     player.body.velocity.y = 0;
     
@@ -123,4 +102,4 @@ function move(){
         head.animations.stop();
         head.frame = 0;
     }
-}
+}*/

@@ -60,11 +60,11 @@ Basic.prototype.place = function(x,y){
                 Moveable.apply(this,[game,x,y,key,speed]);
 
                 this.head = head;
-                var cursors;
+                /*var cursors;
                 var keyW;
                 var keyS;
                 var keyA;
-                var keyD;
+                var keyD;*/
 
 
                 
@@ -133,9 +133,12 @@ Basic.prototype.place = function(x,y){
 
             Player.prototype = Object.create(Moveable.prototype);
             Player.constructor = Player;
-            Player.prototype.move = function(){                  
+            Player.prototype.move = function(){ 
                 
-                    if(this.keyA.isDown || this.keyD.isDown || this.keyW.isDown ||this.keyS.isDown){
+                    if(keyA instanceof Phaser.Key)
+                        console.log("Ou yeah baby");
+                
+                    if(keyA.isDown || keyD.isDown || keyW.isDown ||keyS.isDown){
                         if (this.keyA.isDown)
                         {
                             //  Move to the left
@@ -175,7 +178,7 @@ Basic.prototype.place = function(x,y){
                     }
             }         
             Player.prototype.update = function(){
-                this.hola();
+                //this.hola();
                 this.move();
                 
             }

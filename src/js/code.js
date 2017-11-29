@@ -16,13 +16,16 @@ function preload() {
 //Vars
     
     
-    var platforms;
+    /*var platforms;
     var movement;
     var cursors;
     var keyW;
     var keyS;
     var keyA;
-    var keyD;
+    var keyD;*/
+
+
+    
 
     
     
@@ -39,13 +42,14 @@ function create() {
     var player = new Player(this.game,400,300,'isaac',5,this.head);
 
     player.addChild(head);
-    head.place(0,0);
+    head.place(-9,-35);
 
     //player.body.collideWorldBounds = true;
 
+    var aid = new Bullet(this.game,200,200,'aid',1,'down');
     
-
-    var aid = new Bullet(this.game,200,200,'aid',1,'down');  
+    
+    console.log(player);  
     //this.game.world.addChild(aid);
 
     if(player instanceof Phaser.Sprite)

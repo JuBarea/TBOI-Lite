@@ -4,11 +4,15 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 
 function preload() {
-    game.load.image('bckgrnd','/src/images/StartingRoom.png');
-    game.load.spritesheet('isaac','/src/images/movement.png',32,19);
-    game.load.spritesheet('head','/src/images/headAnim.png',45,40);
-    game.load.image('aid','/src/images/BulletTemp.png');
-    game.load.image('poop_01', 'images/poop_01.png');
+
+    //this.game.load.baseURL = 'https://JuBarea.github.io/TBOI-Lite/src/';
+    //this.game.load.crossOrigin = 'anonymous';
+
+    game.load.image('bckgrnd','/images/StartingRoom.png');
+    game.load.spritesheet('isaac','/images/movement.png',32,19);
+    game.load.spritesheet('head','/images/headAnim.png',45,40);
+    game.load.image('aid','/images/BulletTemp.png');
+    game.load.image('poop_01', '/images/poop_01.png');
     
     game.world.setBounds(85,90,635,370);
     game.camera.bounds = new Phaser.Rectangle(0, 0, 800, 600)

@@ -1,7 +1,7 @@
 # Awesome game
 
 Awesome game by
-[gituser](https://github.com/gituser).
+[gituser](https://github.com/JuBarea).
 
 Initial scaffolding generated with [generator-gamejam](https://github.com/belen-albeza/generator-gamejam/).
 

@@ -86,10 +86,10 @@ Basic.prototype.place = function(x,y){
                     this.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
 
                 //Shooting animations
-                    this.head.animations.add('down',[0,1,0],10,false);    
-                    this.head.animations.add('right',[2,3,2],10,false);   
-                    this.head.animations.add('up',[4,5,4],10,false);                          
-                    this.head.animations.add('left',[6,7,6],10,false);    
+                    this.head.animations.add('down',[0,1,0],7,false);    
+                    this.head.animations.add('right',[2,3,2],7,false);   
+                    this.head.animations.add('up',[4,5,4],7,false);                          
+                    this.head.animations.add('left',[6,7,6],7,false);    
                 //Contorls
                     cursors = this.game.input.keyboard.createCursorKeys();
                     keyW = this.game.input.keyboard.addKey(Phaser.Keyboard.W);

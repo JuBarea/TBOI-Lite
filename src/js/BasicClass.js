@@ -177,11 +177,11 @@ Basic.prototype.place = function(x,y){
                         head.frame = 0;
                     }
             }         
-            Player.prototype.update = function(){
+           /* Player.prototype.update = function(){
                 //this.hola();
                 this.move();
                 
-            }
+            }*/
             
     //heritage
     

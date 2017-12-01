@@ -4,10 +4,11 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 
 function preload() {
-    game.load.image('bckgrnd','/images/Background.png');
+    game.load.image('bckgrnd','/images/StartingRoom.png');
     game.load.spritesheet('isaac','/images/movement.png',32,19);
     game.load.spritesheet('head','/images/headAnim.png',45,40);
     game.load.image('aid','/images/firstaid.png');
+    game.load.image('poop_01', 'images/poop_01.png');
     
     //game.world.setBounds(285, 180, 1355, 720);
     //game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
@@ -35,8 +36,11 @@ function create() {
     //game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  A simple background for our game
-    game.add.sprite(0, 0, 'bckgrnd');
- 
+var background = game.add.sprite(0, 0, 'bckgrnd');
+    background.scale.setTo(0.92, 1);
+    //Poop sprite
+var poop = game.add.sprite(500, 250, 'poop_01');
+    poop.scale.setTo(0.40, 0.40);
 
     var head = new Basic(this.game,0,0,'head');
     var player = new Player(this.game,400,300,'isaac',5,this.head);

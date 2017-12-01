@@ -1,4 +1,4 @@
-'use strict';
+
 
 //node ./node_modules/gulp/bin/gulp run
 

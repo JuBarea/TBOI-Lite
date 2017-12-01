@@ -1,4 +1,4 @@
-'use strict';
+
 
 function Basic(game,x,y,key){
     Phaser.Sprite.call(this,game,x,y,key);

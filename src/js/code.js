@@ -10,8 +10,8 @@ function preload() {
     game.load.image('aid','/images/BulletTemp.png');
     game.load.image('poop_01', 'images/poop_01.png');
     
-    //game.world.setBounds(285, 180, 1355, 720);
-    //game.camera.bounds = new Phaser.Rectangle(0, 0, 1920, 1080)
+    game.world.setBounds(85,90,635,370);
+    game.camera.bounds = new Phaser.Rectangle(0, 0, 800, 600)
    
 }
 //Vars
@@ -39,7 +39,7 @@ var poop = game.add.sprite(500, 250, 'poop_01');
     var aid = new Bullet(this.game,200,200,'aid',1,'down');
     var head = new Basic(this.game,0,0,'head');
     head.body.collideWorldBounds = false;
-    var player = new Player(this.game,400,300,'isaac',5,head,bulletPool);
+    var player = new Player(this.game,400,300,'isaac',3,head,bulletPool);
 
     player.addChild(head);
     head.place(-9,-35);

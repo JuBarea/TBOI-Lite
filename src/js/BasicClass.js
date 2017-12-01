@@ -58,7 +58,8 @@ Basic.prototype.place = function(x,y){
         
             Bullet.prototype.update = function(){
                 if(this.alive)this.move();
-                if(this.x > this.game.width)this.kill();
+                if(this.x > 720 || this.x < 75)this.kill();
+                if(this.y > 450 || this.y < 75)this.kill();
                 if(this.f != this.alive){
                     console.log("Changing State")
                     this.f = this.alive
@@ -72,16 +73,23 @@ Basic.prototype.place = function(x,y){
 
                 this.head = head;
                 this.bulletPool = tearsKey; //Array or key??
-                this.bulletSpeed = 5;
+                this.bulletSpeed = 3.5;
                 var dir;
-                this.FireRate = 300;
+                this.FireRate = 500;
                 this.bulletTimer = 0;
                 this.i = 0;
+                this.shootingFlag = true;
                                 
                 //  Our two animations, walking left, right and up/down.
                     this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
                     this.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
                     this.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
+
+                //Shooting animations
+                    this.head.animations.add('down',[0,1,0],10,false);    
+                    this.head.animations.add('right',[2,3,2],10,false);   
+                    this.head.animations.add('up',[4,5,4],10,false);                          
+                    this.head.animations.add('left',[6,7,6],10,false);    
                 //Contorls
                     cursors = this.game.input.keyboard.createCursorKeys();
                     keyW = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -100,20 +108,23 @@ Basic.prototype.place = function(x,y){
                             //  Move to the left
                             this.x -= this.speed;
                             this.animations.play('left');
-                            this.head.frame = 6;
+                            if(this.shootingFlag)
+                                this.head.frame = 6;
                         }
                         if (keyD.isDown)
                         {
                             //  Move to the right
                             this.x += this.speed;
                             this.animations.play('right');
-                            this.head.frame = 2;
+                            if(this.shootingFlag)
+                                this.head.frame = 2;
                         } 
                         if(keyW.isDown)
                         {
                             this.y -= this.speed;
                             this.animations.play('up');
-                            this.head.frame = 4;
+                            if(this.shootingFlag)
+                                this.head.frame = 4;
                          
                     
                         }
@@ -121,7 +132,8 @@ Basic.prototype.place = function(x,y){
                         {
                             this.y += this.speed   
                             this.animations.play('up');
-                            this.head.frame = 0;
+                            if(this.shootingFlag)
+                                this.head.frame = 0;
                            
                         }
                 
@@ -129,8 +141,9 @@ Basic.prototype.place = function(x,y){
                     else{
                         //  Reset the players velocity (movement)
                         this.animations.stop();
-                        this.frame = 0;  
-                        this.head.frame = 0;
+                        this.frame = 0;
+                        if(this.shootingFlag)  
+                            this.head.frame = 0;
                         
                     }
             }         
@@ -141,23 +154,31 @@ Basic.prototype.place = function(x,y){
                         if(this.i >= 10) this.i = 0;
                         if (cursors.left.isDown)
                         {
-                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'left')   
+                            this.shootingFlag = false;
+                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'left')
+                            this.head.animations.play('left');   
                             this.i++ 
                     
                         }
                         else if (cursors.right.isDown)
                         {
+                            this.shootingFlag = false;
                             this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'right') 
+                            this.head.animations.play('right');
                             this.i++
                            
                         } 
                         else if(cursors.up.isDown)
                         {
+                            this.shootingFlag = false;
                             this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'up') 
+                            this.head.animations.play('up');
                             this.i++                                                                 
                         } else if(cursors.down.isDown)
                         {   
+                            this.shootingFlag = false;
                             this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'down') 
+                            this.head.animations.play('down');
                             this.i++           
 
                         }
@@ -166,6 +187,8 @@ Basic.prototype.place = function(x,y){
                 }                
             }
             Player.prototype.update = function(){
+                if(cursors.left.isUp && cursors.right.isUp && cursors.up.isUp && cursors.down.isUp )
+                    this.shootingFlag = true;
                 this.move();
                 this.shoot();                
             }

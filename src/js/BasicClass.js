@@ -155,7 +155,7 @@ Basic.prototype.place = function(x,y){
                         if (cursors.left.isDown)
                         {
                             this.shootingFlag = false;
-                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'left')
+                            this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'left')
                             this.head.animations.play('left');   
                             this.i++ 
                     
@@ -163,7 +163,7 @@ Basic.prototype.place = function(x,y){
                         else if (cursors.right.isDown)
                         {
                             this.shootingFlag = false;
-                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'right') 
+                            this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'right') 
                             this.head.animations.play('right');
                             this.i++
                            
@@ -171,13 +171,13 @@ Basic.prototype.place = function(x,y){
                         else if(cursors.up.isDown)
                         {
                             this.shootingFlag = false;
-                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'up') 
+                            this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'up') 
                             this.head.animations.play('up');
                             this.i++                                                                 
                         } else if(cursors.down.isDown)
                         {   
                             this.shootingFlag = false;
-                            this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'down') 
+                            this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'down') 
                             this.head.animations.play('down');
                             this.i++           
 

@@ -192,6 +192,34 @@ Basic.prototype.place = function(x,y){
                 this.move();
                 this.shoot();                
             }
-            
+        
+
+        ///Enemies
+            function Enemy (game,x,y,key,speed,hp,target){
+                Moveable.apply(this,[game,x,y,key,speed]);
+                this.hp = hp; //We set up the HP pf the enemie
+                this.target = target; //A reference to the target of the enemie, so we can get data form it
+            }
+
+            //heritage
+            Enemy.prototype = Object.create(Moveable.prototype)
+            Enemy.constructor = Enemy
+
+
+
+            ///If possible, create the different classes of enemies in a different doc, to avoid having too many thing in this one
+            ///Template to create enemies types
+                /*function TestEnemy (game,x,y,key,speed,hp,target,ExtraVar){
+                    Enemy.apply(this,[game,x,y,key,speed,hp,target])
+                    this.ExtraVar = ExtraVar //Any other Var you might need
+                }
+                TestEnemy.prototype = Object.create(Enemy.prototype)
+                TestEnemy.constructor = TestEnemy //We set up the heritage from the enemy class
+
+                TestEnemy.prototype.TestMethod = function(variable){
+                    //Here goes the code of the method
+                }
+                TestEnemy.prototype.update = function(){}//The update of the class
+                */
     //heritage
     

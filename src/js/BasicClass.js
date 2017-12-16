@@ -61,7 +61,7 @@ Basic.prototype.place = function(x,y){
                 if(this.x > 720 || this.x < 75)this.kill();
                 if(this.y > 450 || this.y < 75)this.kill();
                 if(this.f != this.alive){
-                    console.log("Changing State")
+                    //console.log("Changing State")
                     this.f = this.alive
                 }
             }

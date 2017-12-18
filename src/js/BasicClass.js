@@ -3,7 +3,7 @@ function Basic(game,x,y,key){
     Phaser.Sprite.call(this,game,x,y,key);
     this.game.world.addChild(this);
     game.physics.arcade.enable(this)
-    this.body.collideWorldBounds = true;
+    //this.body.collideWorldBounds = true;
     
 }
 Basic.prototype = Object.create(Phaser.Sprite.prototype); //We make the Basic class inherit from the Sprite Class
@@ -32,6 +32,7 @@ Basic.prototype.place = function(x,y){
                 Moveable.apply(this,[game,x,y,key,speed])
                 this.dir = dir;
                 this.f = this.alive;
+                this.dmg = 1;
             }
 
             Bullet.prototype = Object.create(Moveable.prototype);
@@ -54,6 +55,10 @@ Basic.prototype.place = function(x,y){
                 this.reset(x,y)
                 this.speed = speed;
                 this.dir = dir;
+            }
+
+            Bullet.prototype.onCollision = function(){
+                this.kill();
             }
         
             Bullet.prototype.update = function(){
@@ -79,6 +84,8 @@ Basic.prototype.place = function(x,y){
                 this.bulletTimer = 0;
                 this.i = 0;
                 this.shootingFlag = true;
+                this.body.collideWorldBounds = true;
+                this.flag = true;
                                 
                 //  Our two animations, walking left, right and up/down.
                     this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
@@ -192,6 +199,18 @@ Basic.prototype.place = function(x,y){
                 this.move();
                 this.shoot();                
             }
+
+            Player.prototype.changeBullets = function(Pool){
+
+                console.log(Pool);
+                if(this.flag){
+                    console.log(Pool);
+                    this.bulletPool = Pool;
+                    console.log(this.bulletPool)
+                    this.flag = !this.flag;
+                }
+                
+            }
         
 
         ///Enemies
@@ -222,4 +241,18 @@ Basic.prototype.place = function(x,y){
                 TestEnemy.prototype.update = function(){}//The update of the class
                 */
     //heritage
+
+//Non movable items
     
+function BulletBurst(game,x,y,key,speed,dir){
+    console.log(1);
+    Bullet.apply(this,[game,x,y,key,speed,dir])
+    this.dmg = 1;
+    console.log(2);
+}
+BulletBurst.prototype = Object.create(Bullet.prototype);
+BulletBurst.prototype = BulletBurst;
+
+BulletBurst.prototype.onCollision = function(){
+
+}

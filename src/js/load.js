@@ -11,11 +11,10 @@ var loadState = {
         game.load.spritesheet('isaac','/images/movement.png',32,19);
         game.load.spritesheet('head','/images/headAnim.png',45,40);
         game.load.image('aid','/images/BulletTemp.png');
-        game.load.image('poop_01','/images/Poop_01.png');
+        game.load.image('poop','/images/Poop.png');
         //tests
-        game.load.image('poop_02','/images/firstaid.png');
-        game.load.image('poop_03','/images/diamond.png');
-        game.load.image('poop_04','/images/star.png');
+        game.load.image('arrowTears','/images/arrowtears.png');
+       
 
         game.world.setBounds(85,90,635,370);
         game.camera.bounds = new Phaser.Rectangle(0, 0, 800, 600)
@@ -57,15 +56,16 @@ var gameState = {
         background.scale.setTo(0.92, 1);      
     },
     
-    
-
     create: function () {     
         //  A simple background for our game
         var background = game.add.sprite(0, 0, 'bckgrnd');
         background.scale.setTo(0.92, 1);
         //Poop sprite
-        var poop = game.add.sprite(500, 250, 'poop_01');
-        poop.scale.setTo(0.40, 0.40);
+        this.poop = new Basic(this.game,500, 250, 'poop');
+        this.poop.hp = 3;
+        //console.log(this.poop);
+        
+        
         
         this.bulletPool = []
         for(var i = 0; i<10;i++){    
@@ -73,35 +73,44 @@ var gameState = {
             this.bulletPool[i].kill();
             this.bulletPool[i].body.collideWorldBounds = false;       
             }
+        this.burstPool = []
+        for(var i = 0; i<10;i++){    
+            this.burstPool.push(new Bullet(this.game,200,200,'poop',1,'right'))
+            this.burstPool[i].kill();
+            this.burstPool[i].body.collideWorldBounds = false;       
+            }
+            console.log(this.burstPool)
         
-        this.aid = new Bullet(this.game,200,200,'aid',1,'down')
+        //this.aid = new Bullet(this.game,200,200,'aid',1,'down')
         var head = new Basic(this.game,0,0,'head');
         head.body.collideWorldBounds = false;
-        var player = new Player(this.game,400,300,'isaac',3,head,this.bulletPool);
+        this.player = new Player(this.game,400,300,'isaac',3,head,this.bulletPool);
         
-        player.addChild(head);
+        this.player.addChild(head);
         head.place(-9,-35);
-
-
-        var roomDat = [];
-        roomDat[0] = [this.game,50,50,'poop_02']
-        roomDat[1] = [this.game,150,150,'poop_03']
-        roomDat[2] = [this.game,250,250,'poop_04']
-        Room(this.game,roomDat);
-            
     },
         
-        update: function () {
-            //Bullet collison V1
-            for(var i = 0;i<this.bulletPool.length;i++)
-                this.game.physics.arcade.collide(this.aid,this.bulletPool[i],onCollision);
+    update: function () {
+        //Bullet collison V1
+        for(var i = 0;i<this.bulletPool.length;i++)
+            this.game.physics.arcade.collide(this.poop,this.bulletPool[i],Collision);                
+            this.game.physics.arcade.collide(this.poop,this.player,sup);
 
-            function onCollision(obj1,obj2){
-                console.log("colision");
-                obj2.kill();
+        function sup(obj1,obj2){
+            console.log(this.burstPool)
+            console.log(this.burstPool)
+            console.log(this.player)
+            //obj2.changeBullets(this.burstPool);
+        }
+            
+        function Collision(obj1,obj2){                
+            obj1.hp -= obj2.dmg;
+            console.log(obj1.hp);
+            if(obj1.hp === 0) obj1.kill();
+            obj2.onCollision();
             }
 
-        }
+    }
 
        
 }

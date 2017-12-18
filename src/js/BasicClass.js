@@ -22,6 +22,7 @@ Basic.prototype.place = function(x,y){
 
         Basic.apply(this,[game,x,y,key]);
         this.speed = speed;
+        
     }
     //heritage
     Moveable.prototype = Object.create(Basic.prototype);
@@ -86,6 +87,19 @@ Basic.prototype.place = function(x,y){
                 this.shootingFlag = true;
                 this.body.collideWorldBounds = true;
                 this.flag = true;
+                this.money = 0;
+                this.bombs = 0;
+                this.doorKeys = 0;
+
+                this.hp = 3;
+                this.maxHP = this.hp;
+                this.hpPool = [];
+                for(var i = 0; i<this.maxHP; i++){
+                    this.hpPool[i] = this.game.add.sprite(20 + 45*i,20,'redHeart');
+                    this.hpPool[i].frame = 0;
+                }
+                    
+
                                 
                 //  Our two animations, walking left, right and up/down.
                     this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
@@ -103,11 +117,17 @@ Basic.prototype.place = function(x,y){
                     keyA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
                     keyS = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
                     keyD = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+                    
+                //Debug
+                    keyK = this.game.input.keyboard.addKey(Phaser.Keyboard.K);
+                    keyH = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
             }
 
             Player.prototype = Object.create(Moveable.prototype);
             Player.constructor = Player;
             Player.prototype.move = function(){ 
+
+                    
           
                     if(keyA.isDown || keyD.isDown || keyW.isDown ||keyS.isDown){
                         if (keyA.isDown)
@@ -156,7 +176,7 @@ Basic.prototype.place = function(x,y){
             }         
             Player.prototype.shoot = function(){
 
-                if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown ||cursors.down.isDown ){
+                if(cursors.left.isDown || cursors.right.isDown || cursors.up.isDown ||cursors.down.isDown || keyK.isDown||keyH.isDown){
                     if(this.game.time.now > this.bulletTimer){
                         if(this.i >= 10) this.i = 0;
                         if (cursors.left.isDown)
@@ -189,6 +209,8 @@ Basic.prototype.place = function(x,y){
                             this.i++           
 
                         }
+                        if(keyK.isDown)this.takeDamage(1);
+                        if(keyH.isDown)this.heal(1);
                         this.bulletTimer = this.game.time.now + this.FireRate;                  
                     }                  
                 }                
@@ -196,10 +218,25 @@ Basic.prototype.place = function(x,y){
             Player.prototype.update = function(){
                 if(cursors.left.isUp && cursors.right.isUp && cursors.up.isUp && cursors.down.isUp )
                     this.shootingFlag = true;
+                    
                 this.move();
                 this.shoot();                
             }
-
+            Player.prototype.takeDamage = function(dmg){
+                this.hp -= dmg;
+                console.log(this.hp)
+                for(var x = 0; x<dmg;x++){
+                    this.hpPool[this.hp].frame = 2;
+                }                   
+            }
+            Player.prototype.heal = function(heal){
+                this.hp += heal;
+                if(this.hp>this.maxHP)this.hp = this.maxHP;
+                for(var i = 0; i<this.hp;i++){
+                    this.hpPool[i].frame = 0;
+                }
+            }
+            
             Player.prototype.changeBullets = function(Pool){
 
                 console.log(Pool);

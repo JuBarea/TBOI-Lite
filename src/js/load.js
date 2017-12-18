@@ -12,6 +12,10 @@ var loadState = {
         game.load.spritesheet('head','/images/headAnim.png',45,40);
         game.load.image('aid','/images/BulletTemp.png');
         game.load.image('poop','/images/Poop.png');
+        game.load.spritesheet('redHeart','/images/redHeart.png',42,42);
+        game.load.image('redPickUp','/images/redHeartPickUp.png');
+        game.load.image('coin','/images/coin.png')
+        game.load.image('UiData','/images/UiData.png')
         //tests
         game.load.image('arrowTears','/images/arrowtears.png');
        
@@ -60,13 +64,31 @@ var gameState = {
         //  A simple background for our game
         var background = game.add.sprite(0, 0, 'bckgrnd');
         background.scale.setTo(0.92, 1);
+
+        var UiData = game.add.sprite(20,60,'UiData');
+        this.textCoins = game.add.text(50, 65, '0', { fill: 'white'});
+        this.textCoins.fontSize = '12pt';
+        this.textKeys = game.add.text(50, 90, '0', { fill: 'white'});
+        this.textKeys.fontSize = '12pt';
+        this.textBombs = game.add.text(50, 115, '0', {fill: 'white'});
+        this.textBombs.fontSize = '12pt';
         //Poop sprite
-        this.poop = new Basic(this.game,500, 250, 'poop');
-        this.poop.hp = 3;
+            this.poopsies = [];
+            this.poopsies[0] = new Basic(this.game,500, 100, 'poop');
+            this.poopsies[0].hp = 3
+            this.poopsies[1] = new Basic(this.game,500, 200, 'poop');
+            this.poopsies[1].hp = 3
+            this.poopsies[2] = new Basic(this.game,500, 300, 'poop');
+            this.poopsies[2].hp = 3
+            this.poopsies[3] = new Basic(this.game,500, 400, 'poop');
+            this.poopsies[3].hp = 3
+    
+
         //console.log(this.poop);
-        
-        
-        
+        this.pickUps = [];
+            this.pickUps[0] = new Basic(this.game,200,250,'redPickUp');
+            this.pickUps[1] = new Basic(this.game,200,350,'coin');
+ 
         this.bulletPool = []
         for(var i = 0; i<10;i++){    
             this.bulletPool.push(new Bullet(this.game,200,200,'aid',1,'right'))
@@ -79,9 +101,7 @@ var gameState = {
             this.burstPool[i].kill();
             this.burstPool[i].body.collideWorldBounds = false;       
             }
-            console.log(this.burstPool)
         
-        //this.aid = new Bullet(this.game,200,200,'aid',1,'down')
         var head = new Basic(this.game,0,0,'head');
         head.body.collideWorldBounds = false;
         this.player = new Player(this.game,400,300,'isaac',3,head,this.bulletPool);
@@ -93,19 +113,33 @@ var gameState = {
     update: function () {
         //Bullet collison V1
         for(var i = 0;i<this.bulletPool.length;i++)
-            this.game.physics.arcade.collide(this.poop,this.bulletPool[i],Collision);                
-            this.game.physics.arcade.collide(this.poop,this.player,sup);
+            for(var j = 0; j<this.poopsies.length; j++)
+                this.game.physics.arcade.collide(this.poopsies[j],this.bulletPool[i],Collision);                
+        
+        for(var i = 0;i<this.pickUps.length;i++)
+            this.game.physics.arcade.collide(this.pickUps[i],this.player,pickUpCode);
 
-        function sup(obj1,obj2){
-            console.log(this.burstPool)
-            console.log(this.burstPool)
-            console.log(this.player)
-            //obj2.changeBullets(this.burstPool);
+        this.textCoins.text = this.player.money;
+        this.textKeys = this.player.bombs;
+        this.textBombs = this.player.doorKeys;
+            
+        function pickUpCode(obj1,obj2){
+            if(obj1.key === 'redPickUp')
+                obj2.heal(1);
+            else if(obj1.key === 'coin'){
+                obj2.money++;
+            }
+            else if(obj1.key === 'keyPickUp'){
+                obj2.doorKeys++;
+            }
+            else if(obj1.key === 'bomb'){
+                obj2.bombs++;
+            }
+            obj1.kill();
         }
             
         function Collision(obj1,obj2){                
             obj1.hp -= obj2.dmg;
-            console.log(obj1.hp);
             if(obj1.hp === 0) obj1.kill();
             obj2.onCollision();
             }

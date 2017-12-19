@@ -8,8 +8,11 @@ body {
   margin: 0;
   font-family: Courier, 'Courier New', monospace;
   font-size: 1.6rem;
+  background-color: rgb(0, 0, 0);
   background-image: url("http://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/250900/301d60266e9562c9ed1e446239254d9c6e2d79a6.png");
-  background-repeat: no-repeat;
+  background-size:     cover;                      /* <------ */
+  background-repeat:   no-repeat;
+  background-position: center center;
   /* background: #fff; */
   color: rgb(255, 102, 0);
 }

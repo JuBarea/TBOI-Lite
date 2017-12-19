@@ -13,14 +13,14 @@ var loadState = {
         game.load.image('aid','/images/BulletTemp.png');
         game.load.spritesheet('redHeart','/images/redHeart.png',42,42);    
         game.load.image('coin','/images/coin.png')
+        game.load.image('bckgrnd','/images/StartingRoom.png');
         
         //tests
-        game.load.image('UiData','/images/UiData.png')
-        game.load.image('redPickUp','/images/redHeartPickUp.png');
-        game.load.image('startScreen','/images/startScreen.png');
-        game.load.image('bckgrnd','/images/StartingRoom.png');
-        game.load.image('poop','/images/Poop.png');
-        game.load.image('arrowTears','/images/arrowtears.png');
+        game.load.image('UiData','/images/UiData.png') //-
+        game.load.image('redPickUp','/images/redHeartPickUp.png');//-
+        game.load.image('startScreen','/images/startScreen.png');//-
+        game.load.image('poop','/images/Poop.png');//-
+        //game.load.image('arrowTears','/images/arrowtears.png');
        
 
         game.world.setBounds(85,90,635,370);

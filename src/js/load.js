@@ -3,7 +3,7 @@ var loadState = {
 
     preload: function () {
 
-        this.game.load.baseURL = 'https://JuBarea.github.io/TBOI-Lite/src/';
+        this.game.load.baseURL = 'https://JuBarea.github.io/TBOI-Lite/src';
         this.game.load.crossOrigin = 'anonymous';
 
         game.load.image('startScreen','images/startScreen.png');

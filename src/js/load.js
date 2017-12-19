@@ -16,10 +16,10 @@ var loadState = {
         game.load.image('bckgrnd','/images/StartingRoom.png');
         
         //tests
-        game.load.image('UiData','/images/UiData.png') //-
-        game.load.image('redPickUp','/images/redHeartPickUp.png');//-
-        game.load.image('startScreen','/images/startScreen.png');//-
-        game.load.image('poop','/images/Poop.png');//-
+        game.load.image('UiData','/images/UiData.PNG') //-#pray
+        game.load.image('redPickUp','/images/redHeartPickup.png');//-#pray
+        game.load.image('startScreen','/images/startScreen.PNG');//-#pray
+        game.load.image('poop','/images/poop.png');//-#pray
         //game.load.image('arrowTears','/images/arrowtears.png');
        
 

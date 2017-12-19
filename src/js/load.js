@@ -3,20 +3,23 @@ var loadState = {
 
     preload: function () {
 
-        this.game.load.baseURL = 'https://JuBarea.github.io/TBOI-Lite/src';
+        //this.game.load.baseURL = 'https://JuBarea.github.io/TBOI-Lite/';
         this.game.load.crossOrigin = 'anonymous';
 
-        game.load.image('startScreen','/images/startScreen.png');
-        game.load.image('bckgrnd','/images/StartingRoom.png');
+        
+
         game.load.spritesheet('isaac','/images/movement.png',32,19);
         game.load.spritesheet('head','/images/headAnim.png',45,40);
         game.load.image('aid','/images/BulletTemp.png');
-        game.load.image('poop','/images/Poop.png');
-        game.load.spritesheet('redHeart','/images/redHeart.png',42,42);
-        game.load.image('redPickUp','/images/redHeartPickUp.png');
+        game.load.spritesheet('redHeart','/images/redHeart.png',42,42);    
         game.load.image('coin','/images/coin.png')
-        game.load.image('UiData','/images/UiData.png')
+        
         //tests
+        game.load.image('UiData','/images/UiData.png')
+        game.load.image('redPickUp','/images/redHeartPickUp.png');
+        game.load.image('startScreen','/images/startScreen.png');
+        game.load.image('bckgrnd','/images/StartingRoom.png');
+        game.load.image('poop','/images/Poop.png');
         game.load.image('arrowTears','/images/arrowtears.png');
        
 

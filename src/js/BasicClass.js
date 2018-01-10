@@ -91,6 +91,8 @@ Basic.prototype.place = function(x,y){
                     this.money = 0;
                     this.bombs = 0;
                     this.doorKeys = 0;
+                    this.iFrames = 750;
+                    this.attackTimer = 0;
 
                     this.hp = 3;
                     this.maxHP = this.hp;
@@ -225,11 +227,14 @@ Basic.prototype.place = function(x,y){
                     this.shoot();                
                 }
                 Player.prototype.takeDamage = function(dmg){
-                    this.hp -= dmg;
-                    console.log(this.hp)
-                    for(var x = 0; x<dmg;x++){
-                        this.hpPool[this.hp].frame = 2;
-                    }                   
+                    if(this.game.time.now > this.attackTimer){  
+                        this.hp -= dmg;
+                        console.log(this.hp)
+                        for(var x = 0; x<dmg;x++){
+                            this.hpPool[this.hp].frame = 2;
+                        }   
+                    this.attackTimer = this.game.time.now + this.iFrames;                  
+                    }                
                 }
                 Player.prototype.heal = function(heal){
                     this.hp += heal;
@@ -253,45 +258,80 @@ Basic.prototype.place = function(x,y){
         
 
         ///Enemies
-            function Enemy (game,x,y,key,speed,hp,target){
+            function Enemy (game,x,y,key,speed,hp,/*target,*/damage){
                 Moveable.apply(this,[game,x,y,key,speed]);
                 this.hp = hp; //We set up the HP pf the enemie
-                this.target = target; //A reference to the target of the enemie, so we can get data form it
+                //this.target = target; //A reference to the target of the enemie, so we can get data form it
+                
+                this.damage = damage;
             }
 
             //heritage
             Enemy.prototype = Object.create(Moveable.prototype)
             Enemy.constructor = Enemy
 
-
-
             ///If possible, create the different classes of enemies in a different doc, to avoid having too many thing in this one
             ///Template to create enemies types
-                /*function TestEnemy (game,x,y,key,speed,hp,target,ExtraVar){
-                    Enemy.apply(this,[game,x,y,key,speed,hp,target])
-                    this.ExtraVar = ExtraVar //Any other Var you might need
+                function MeleeEnemy (game,x,y,key,speed,hp,damage,target){
+                    Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
+                    this.target = target;
+                    console.log(target)
+                    this.moveFlag = true;
+                    
                 }
-                TestEnemy.prototype = Object.create(Enemy.prototype)
-                TestEnemy.constructor = TestEnemy //We set up the heritage from the enemy class
+                MeleeEnemy.prototype = Object.create(Enemy.prototype)
+                MeleeEnemy.constructor = MeleeEnemy //We set up the heritage from the enemy class
 
-                TestEnemy.prototype.TestMethod = function(variable){
-                    //Here goes the code of the method
+                MeleeEnemy.prototype.movement = function(){
+                    var x,y;
+                    x = this.target.x - this.x;
+                    if(x <0) x = x*-1;
+
+                    y = this.target.y - this.y;
+                    if(y <0) y = y*-1;
+
+                    if(x > y )this.moveFlag = true;
+                    else this.moveFlag = false;
+
+                    if(this.moveFlag){
+                        if(this.x === this.target.x){}
+                        else if (this.x < this.target.x){
+                            this.x += this.speed;
+                        }
+                        else if(this.x > this.target.x){
+                            this.x -= this.speed;
+                        }
+                    }
+                    else {
+                        if(this.y === this.target.y){}
+                        else if (this.y < this.target.y){
+                            this.y += this.speed;
+                        }
+                        else if(this.y > this.target.y){
+                            this.y -= this.speed;
+                        }
+                    }
                 }
-                TestEnemy.prototype.update = function(){}//The update of the class
-                */
+
+               
+                MeleeEnemy.prototype.update = function(){
+                    this.movement();
+                    if(this.hp === 0)this.kill();
+                }//The update of the class
+                
     //heritage
 
 //Non movable items
     
-function BulletBurst(game,x,y,key,speed,dir){
-    console.log(1);
-    Bullet.apply(this,[game,x,y,key,speed,dir])
-    this.dmg = 1;
-    console.log(2);
-}
-BulletBurst.prototype = Object.create(Bullet.prototype);
-BulletBurst.prototype = BulletBurst;
+    function BulletBurst(game,x,y,key,speed,dir){
+        console.log(1);
+        Bullet.apply(this,[game,x,y,key,speed,dir])
+        this.dmg = 1;
+        console.log(2);
+    }
+    BulletBurst.prototype = Object.create(Bullet.prototype);
+    BulletBurst.prototype = BulletBurst;
 
-BulletBurst.prototype.onCollision = function(){
+    BulletBurst.prototype.onCollision = function(){
 
-}
+    }

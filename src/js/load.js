@@ -100,20 +100,18 @@ var gameState = {
             this.bulletPool.push(new Bullet(this.game,200,200,'aid',1,'right'))
             this.bulletPool[i].kill();
             this.bulletPool[i].body.collideWorldBounds = false;       
-            }
-        // this.burstPool = []
-        // for(var i = 0; i<10;i++){    
-        //     this.burstPool.push(new Bullet(this.game,200,200,'poop',1,'right'))
-        //     this.burstPool[i].kill();
-        //     this.burstPool[i].body.collideWorldBounds = false;       
-        //     }
+        }
         
+        
+
         var head = new Basic(this.game,0,0,'head');
         head.body.collideWorldBounds = false;
         this.player = new Player(this.game,400,300,'isaac',3,head,this.bulletPool);
         
         this.player.addChild(head);
         head.place(-9,-35);
+
+        this.enemy = new MeleeEnemy(this.game,100,100,'poop',1.5,3,1,this.player)
     },
         
     update: function () {
@@ -125,6 +123,17 @@ var gameState = {
         
         for(var i = 0;i<this.pickUps.length;i++)
             this.game.physics.arcade.collide(this.pickUps[i],this.player,pickUpCode);
+
+        this.game.physics.arcade.collide(this.enemy,this.player,hit)
+
+        function hit(obj1,obj2){
+            console.log(obj1.damage);
+
+            obj2.takeDamage(obj1.damage);
+        }
+
+        for(var i = 0;i<this.bulletPool.length;i++)
+            this.game.physics.arcade.collide(this.enemy,this.bulletPool[i],Collision);
 
 
         this.textCoins.text = this.player.money;

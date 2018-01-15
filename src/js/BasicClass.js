@@ -2,7 +2,7 @@
 function Basic(game,x,y,key){
     Phaser.Sprite.call(this,game,x,y,key);
     this.game.world.addChild(this);
-    game.physics.arcade.enable(this)
+    this.game.physics.arcade.enable(this)
     //this.body.collideWorldBounds = true;
     
 }
@@ -57,7 +57,7 @@ Basic.prototype.place = function(x,y){
                 this.speed = speed;
                 this.dir = dir;
             }
-
+            ///////////REMOVE???//////////////////////
             Bullet.prototype.onCollision = function(){
                 this.kill();
             }
@@ -81,7 +81,7 @@ Basic.prototype.place = function(x,y){
                     this.head = head;
                     this.bulletPool = tearsKey; //Array or key??
                     this.bulletSpeed = 3.5;
-                    var dir;
+                    //var dir;
                     this.FireRate = 500;
                     this.bulletTimer = 0;
                     this.i = 0;
@@ -129,39 +129,41 @@ Basic.prototype.place = function(x,y){
             Player.prototype = Object.create(Moveable.prototype);
             Player.constructor = Player;
             //Player functions 
-                Player.prototype.move = function(){ 
-
-                        
+                Player.prototype.move = function(){    
             
                         if(keyA.isDown || keyD.isDown || keyW.isDown ||keyS.isDown){
                             if (keyA.isDown)
                             {
                                 //  Move to the left
-                                this.x -= this.speed;
+                                this.body.velocity.y=0;
+                                this.body.velocity.x = -this.speed*40;
                                 this.animations.play('left');
                                 if(this.shootingFlag)
                                     this.head.frame = 6;
                             }
-                            if (keyD.isDown)
+                            else if (keyD.isDown)
                             {
+                                this.body.velocity.y=0;
                                 //  Move to the right
-                                this.x += this.speed;
+                                this.body.velocity.x = this.speed*40;
                                 this.animations.play('right');
                                 if(this.shootingFlag)
                                     this.head.frame = 2;
                             } 
-                            if(keyW.isDown)
+                            else if(keyW.isDown)
                             {
-                                this.y -= this.speed;
+                                this.body.velocity.x=0;
+                                this.body.velocity.y = -this.speed*40;
                                 this.animations.play('up');
                                 if(this.shootingFlag)
                                     this.head.frame = 4;
                             
                         
                             }
-                            if(keyS.isDown)
+                            else if(keyS.isDown)
                             {
-                                this.y += this.speed   
+                                this.body.velocity.x=0;
+                                this.body.velocity.y = this.speed*40;   
                                 this.animations.play('up');
                                 if(this.shootingFlag)
                                     this.head.frame = 0;
@@ -173,6 +175,8 @@ Basic.prototype.place = function(x,y){
                             //  Reset the players velocity (movement)
                             this.animations.stop();
                             this.frame = 0;
+                            this.body.velocity.x=0;
+                            this.body.velocity.y=0;
                             if(this.shootingFlag)  
                                 this.head.frame = 0;
                             
@@ -188,6 +192,7 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'left')
                                 this.head.animations.play('left');   
+                                this.roomChange("left")
                                 this.i++ 
                         
                             }
@@ -196,6 +201,7 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'right') 
                                 this.head.animations.play('right');
+                                this.roomChange("right")
                                 this.i++
                             
                             } 
@@ -204,12 +210,14 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'up') 
                                 this.head.animations.play('up');
+                                this.roomChange("up")
                                 this.i++                                                                 
                             } else if(cursors.down.isDown)
                             {   
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'down') 
                                 this.head.animations.play('down');
+                                this.roomChange("down")
                                 this.i++           
 
                             }
@@ -243,6 +251,27 @@ Basic.prototype.place = function(x,y){
                         this.hpPool[i].frame = 0;
                     }
                 }
+
+                Player.prototype.roomChange = function(side){
+                    if(side === "right"){
+                        this.x += 220;
+                        game.camera.x += 800;
+                    }
+                    else if(side === "left"){
+                        this.x -=220;
+                        game.camera.x -= 800;
+                    }
+                    else if(side === "down"){
+                        this.y += 300;
+                        game.camera.y += 600;
+                    }
+                    else if(side === "up"){
+                        this.y -= 300;
+                        game.camera.y -= 600;
+                    }
+        
+
+                }
                 //WIP
                 Player.prototype.changeBullets = function(Pool){
 
@@ -262,16 +291,14 @@ Basic.prototype.place = function(x,y){
                 Moveable.apply(this,[game,x,y,key,speed]);
                 this.hp = hp; //We set up the HP pf the enemie
                 //this.target = target; //A reference to the target of the enemie, so we can get data form it
-                
-                this.damage = damage;
+                this.dmg = damage;
             }
-
             //heritage
-            Enemy.prototype = Object.create(Moveable.prototype)
-            Enemy.constructor = Enemy
+                Enemy.prototype = Object.create(Moveable.prototype)
+                Enemy.constructor = Enemy
 
             ///If possible, create the different classes of enemies in a different doc, to avoid having too many thing in this one
-            ///Template to create enemies types
+            ///Melee Enemy
                 function MeleeEnemy (game,x,y,key,speed,hp,damage,target){
                     Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
                     this.target = target;
@@ -296,42 +323,160 @@ Basic.prototype.place = function(x,y){
                     if(this.moveFlag){
                         if(this.x === this.target.x){}
                         else if (this.x < this.target.x){
-                            this.x += this.speed;
+                            this.body.velocity.x = this.speed*20;
+                            this.body.velocity.y=0;
                         }
                         else if(this.x > this.target.x){
-                            this.x -= this.speed;
+                            this.body.velocity.y=0;
+                            this.body.velocity.x = -this.speed*20;
                         }
                     }
                     else {
                         if(this.y === this.target.y){}
                         else if (this.y < this.target.y){
-                            this.y += this.speed;
+                            this.body.velocity.x=0;
+                            this.body.velocity.y = this.speed*20; 
                         }
                         else if(this.y > this.target.y){
-                            this.y -= this.speed;
+                            this.body.velocity.x=0;
+                            this.body.velocity.y = -this.speed*20;
                         }
                     }
                 }
 
                
                 MeleeEnemy.prototype.update = function(){
-                    this.movement();
-                    if(this.hp === 0)this.kill();
+                    if(this.hp > 0){
+                        this.movement();
+                    }
+                    else this.kill();
                 }//The update of the class
+
+
+            //Range Enemy
+                function RangeEnemy(game,x,y,key,speed,hp,damage,target,bulletPool){
+                    Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
+                    this.target = target;
+                    console.log(target)
+                    this.moveFlag = true;
+                    this.bulletTimer=0;
+                    this.bulletSpeed = 2.5;
+                    this.FireRate = 1000;
+                    this.i = 0;
+                    this.bulletPool = bulletPool;
+                    this.inRange = false;
+                }
+
+                RangeEnemy.prototype = Object.create(Enemy.prototype)
+                RangeEnemy.constructor = RangeEnemy 
+
+                //Functions
+                    RangeEnemy.prototype.movement = function(){
+                        var x,y;
+                        x = this.x - this.target.x;
+                        y = this.y - this.target.y;
+
+                        if((x>-15 && x<15)|| (y>-15 && y<15)){
+                            this.body.velocity.y=0;
+                            this.body.velocity.x=0;
+                            this.inRange = true;
+                        }
+                        else{
+                            this.inRange = false;
+                            x = this.target.x - this.x;
+                            if(x <0) x = x*-1;
+    
+                            y = this.target.y - this.y;
+                            if(y <0) y = y*-1;
+    
+                            if(x < y )this.moveFlag = true;
+                            else this.moveFlag = false;
+    
+                            if(this.moveFlag){
+                                if(this.x === this.target.x){}
+                                else if (this.x < this.target.x){
+                                    this.body.velocity.x = this.speed*20;
+                                    this.body.velocity.y=0;
+                                }
+                                else if(this.x > this.target.x){
+                                    this.body.velocity.y=0;
+                                    this.body.velocity.x = -this.speed*20;
+                                }
+                            }
+                            else {
+                                if(this.y === this.target.y){}
+                                else if (this.y < this.target.y){
+                                    this.body.velocity.x=0;
+                                    this.body.velocity.y = this.speed*20; 
+                                }
+                                else if(this.y > this.target.y){
+                                    this.body.velocity.x=0;
+                                    this.body.velocity.y = -this.speed*20;
+                                }
+                            }
+                        }
+                        
+                    }
+                    RangeEnemy.prototype.shoot = function(){
+                        {
+                            if(this.game.time.now > this.bulletTimer){
+                                //console.log("Hola");
+                                if(this.i >= 10) this.i = 0;
+                                if(this.inRange){
+                                    
+                                }
+                                if (this.x > this.target.x && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
+                                    console.log("left")
+                                    //this.shootingFlag = false;
+                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'left')
+                                    //this.head.animations.play('left');   
+                                    this.i++     
+                                }
+                                if (this.x < this.target.x  && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
+                                    console.log("right")
+                                    //this.shootingFlag = false;
+                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'right') 
+                                    //this.head.animations.play('right');
+                                    this.i++                            
+                                } 
+                                //console.log("X: " + this.x + "   Y: " + this.y)
+                                //console.log("tarX: " + this.target.x + "   tarY: " + this.target.y)
+                                if(this.y > this.target.y && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){
+                                    console.log("up")
+                                    //this.shootingFlag = false;
+                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'up') 
+                                    //this.head.animations.play('up');
+                                    this.i++                                                                 
+                                } 
+                                if(this.y < this.target.y  && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){   
+                                    console.log("down")
+                                    //this.shootingFlag = false;
+                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'down') 
+                                    //this.head.animations.play('down');
+                                    this.i++           
+                                }
+                                this.bulletTimer = this.game.time.now + this.FireRate;                  
+                            }                                     
+                        }
+                    }
+
+                    RangeEnemy.prototype.update = function(){
+                        if(this.hp > 0){
+                            this.movement();
+                            this.shoot();
+                        }
+                        else this.kill();
+                    }//The update of the class
                 
     //heritage
 
 //Non movable items
     
-    function BulletBurst(game,x,y,key,speed,dir){
-        console.log(1);
-        Bullet.apply(this,[game,x,y,key,speed,dir])
-        this.dmg = 1;
-        console.log(2);
+    function Inmovable(game,x,y,key){
+        
+        Basic.apply(this,[game,x,y,key]);
+        this.body.immovable = true;
+        this.body.moves = false;
     }
-    BulletBurst.prototype = Object.create(Bullet.prototype);
-    BulletBurst.prototype = BulletBurst;
-
-    BulletBurst.prototype.onCollision = function(){
-
-    }
+    Inmovable.prototype = Object.create(Basic.prototype);
+    Inmovable.constructor = Inmovable;

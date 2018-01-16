@@ -64,8 +64,8 @@ Basic.prototype.place = function(x,y){
         
             Bullet.prototype.update = function(){
                 if(this.alive)this.move();
-                if(this.x > 720 || this.x < 75)this.kill();
-                if(this.y > 450 || this.y < 75)this.kill();
+                // if(this.x > 720 || this.x < 75)this.kill();
+                // if(this.y > 450 || this.y < 75)this.kill();
                 if(this.f != this.alive){
                     //console.log("Changing State")
                     this.f = this.alive
@@ -100,14 +100,15 @@ Basic.prototype.place = function(x,y){
                     for(var i = 0; i<this.maxHP; i++){
                         this.hpPool[i] = this.game.add.sprite(20 + 45*i,20,'redHeart');
                         this.hpPool[i].frame = 0;
+                        this.hpPool[i].fixedToCamera = true;
                     }
                     
 
                                 
                 //  Our two animations, walking left, right and up/down.
-                    this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
-                    this.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
-                    this.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
+                    this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 25, true);
+                    this.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 25, true);
+                    this.animations.add('up',[0,1,2,3,4,5,6,7,8,9],25,true);
 
                 //Shooting animations
                     this.head.animations.add('down',[0,1,0],7,false);    
@@ -192,7 +193,7 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'left')
                                 this.head.animations.play('left');   
-                                this.roomChange("left")
+                                
                                 this.i++ 
                         
                             }
@@ -201,7 +202,7 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'right') 
                                 this.head.animations.play('right');
-                                this.roomChange("right")
+                                
                                 this.i++
                             
                             } 
@@ -210,19 +211,19 @@ Basic.prototype.place = function(x,y){
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'up') 
                                 this.head.animations.play('up');
-                                this.roomChange("up")
+                                
                                 this.i++                                                                 
                             } else if(cursors.down.isDown)
                             {   
                                 this.shootingFlag = false;
                                 this.bulletPool[this.i].resete(this.x,this.y-20,this.bulletSpeed,'down') 
                                 this.head.animations.play('down');
-                                this.roomChange("down")
+                                
                                 this.i++           
 
                             }
                             if(keyK.isDown)this.takeDamage(1);
-                            if(keyH.isDown)this.heal(1);
+                            if(keyH.isDown)this.increaseHP(2);
                             this.bulletTimer = this.game.time.now + this.FireRate;                  
                         }                  
                     }                
@@ -232,7 +233,9 @@ Basic.prototype.place = function(x,y){
                         this.shootingFlag = true;
                         
                     this.move();
-                    this.shoot();                
+                    this.shoot();  
+                     
+
                 }
                 Player.prototype.takeDamage = function(dmg){
                     if(this.game.time.now > this.attackTimer){  
@@ -273,17 +276,35 @@ Basic.prototype.place = function(x,y){
 
                 }
                 //WIP
-                Player.prototype.changeBullets = function(Pool){
+                Player.prototype.increaseHP = function(hpIncrease){
 
-                    console.log(Pool);
-                    if(this.flag){
-                        console.log(Pool);
-                        this.bulletPool = Pool;
-                        console.log(this.bulletPool)
-                        this.flag = !this.flag;
+                    this.maxHP += hpIncrease;
+                    this.hp +=hpIncrease;
+                    for(var i = 0; i<this.maxHP; i++){
+                        this.hpPool[i] = this.game.add.sprite(20 + 45*i,20,'redHeart');
+                        if(i < this.hp)this.hpPool[i].frame = 0;
+                        else this.hpPool[i].frame = 2;
+                        this.hpPool[i].fixedToCamera = true;
                     }
                     
                 }
+                Player.prototype.loot = function(obj){
+                    if(obj.key === 'redPickUp')
+                        this.heal(1);
+                    else if(obj.key === 'coin'){
+                        this.money++; 
+                    }
+                    else if(obj.key === 'key'){
+                        this.doorKeys++;  
+                        console.log( this.doorKeys)
+                    }
+                    else if(obj.key === '1up'){
+                        this.increaseHP(1);
+                    }
+                    obj.kill();
+                    
+                }
+                
         
 
         ///Enemies
@@ -297,13 +318,22 @@ Basic.prototype.place = function(x,y){
                 Enemy.prototype = Object.create(Moveable.prototype)
                 Enemy.constructor = Enemy
 
+                Enemy.prototype.takeDamage = function(dmg){
+                    this.hp -= dmg;
+                    if(this.hp <= 0) this.kill();
+                }
+
             ///If possible, create the different classes of enemies in a different doc, to avoid having too many thing in this one
             ///Melee Enemy
                 function MeleeEnemy (game,x,y,key,speed,hp,damage,target){
                     Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
                     this.target = target;
-                    console.log(target)
+                    
                     this.moveFlag = true;
+
+                    this.animations.add('left', [20, 21, 22,23,24,25,26,27,28,29], 20, true);
+                    this.animations.add('right', [10, 11, 12,13,14,15,16,17,18,19], 20, true);
+                    this.animations.add('up',[0,1,2,3,4,5,6,7,8,9],20,true);
                     
                 }
                 MeleeEnemy.prototype = Object.create(Enemy.prototype)
@@ -324,11 +354,13 @@ Basic.prototype.place = function(x,y){
                         if(this.x === this.target.x){}
                         else if (this.x < this.target.x){
                             this.body.velocity.x = this.speed*20;
+                            this.animations.play('right');
                             this.body.velocity.y=0;
                         }
                         else if(this.x > this.target.x){
                             this.body.velocity.y=0;
                             this.body.velocity.x = -this.speed*20;
+                            this.animations.play('left');
                         }
                     }
                     else {
@@ -336,10 +368,12 @@ Basic.prototype.place = function(x,y){
                         else if (this.y < this.target.y){
                             this.body.velocity.x=0;
                             this.body.velocity.y = this.speed*20; 
+                            this.animations.play('up');
                         }
                         else if(this.y > this.target.y){
                             this.body.velocity.x=0;
                             this.body.velocity.y = -this.speed*20;
+                            this.animations.play('up');
                         }
                     }
                 }
@@ -357,7 +391,7 @@ Basic.prototype.place = function(x,y){
                 function RangeEnemy(game,x,y,key,speed,hp,damage,target,bulletPool){
                     Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
                     this.target = target;
-                    console.log(target)
+
                     this.moveFlag = true;
                     this.bulletTimer=0;
                     this.bulletSpeed = 2.5;
@@ -365,6 +399,9 @@ Basic.prototype.place = function(x,y){
                     this.i = 0;
                     this.bulletPool = bulletPool;
                     this.inRange = false;
+
+                    this.animations.add('shoot', [1,1,0], 2, false);
+                    this.frame = 0;
                 }
 
                 RangeEnemy.prototype = Object.create(Enemy.prototype)
@@ -389,7 +426,7 @@ Basic.prototype.place = function(x,y){
                             y = this.target.y - this.y;
                             if(y <0) y = y*-1;
     
-                            if(x < y )this.moveFlag = true;
+                            if(x > y )this.moveFlag = true;
                             else this.moveFlag = false;
     
                             if(this.moveFlag){
@@ -420,40 +457,32 @@ Basic.prototype.place = function(x,y){
                     RangeEnemy.prototype.shoot = function(){
                         {
                             if(this.game.time.now > this.bulletTimer){
-                                //console.log("Hola");
-                                if(this.i >= 10) this.i = 0;
-                                if(this.inRange){
+                                
+                                if(this.bulletPool[0] >= 10) this.bulletPool[0]  = 0;
+                                
+                                if (this.x > this.target.x && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
+                                    this.animations.play('shoot'); 
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'left')
+                                    this.bulletPool[0]++    
                                     
                                 }
-                                if (this.x > this.target.x && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
-                                    console.log("left")
-                                    //this.shootingFlag = false;
-                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'left')
-                                    //this.head.animations.play('left');   
-                                    this.i++     
-                                }
                                 if (this.x < this.target.x  && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
-                                    console.log("right")
-                                    //this.shootingFlag = false;
-                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'right') 
-                                    //this.head.animations.play('right');
-                                    this.i++                            
+                                    this.animations.play('shoot');
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'right') 
+                                    this.bulletPool[0]++  
+                                                              
                                 } 
-                                //console.log("X: " + this.x + "   Y: " + this.y)
-                                //console.log("tarX: " + this.target.x + "   tarY: " + this.target.y)
                                 if(this.y > this.target.y && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){
-                                    console.log("up")
-                                    //this.shootingFlag = false;
-                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'up') 
-                                    //this.head.animations.play('up');
-                                    this.i++                                                                 
+                                    this.animations.play('shoot');
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'up') 
+                                    this.bulletPool[0]++  
+                                                                                                   
                                 } 
                                 if(this.y < this.target.y  && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){   
-                                    console.log("down")
-                                    //this.shootingFlag = false;
-                                    this.bulletPool[this.i].resete(this.x,this.y,this.bulletSpeed,'down') 
-                                    //this.head.animations.play('down');
-                                    this.i++           
+                                    this.animations.play('shoot');
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'down') 
+                                    this.bulletPool[0]++    
+                                           
                                 }
                                 this.bulletTimer = this.game.time.now + this.FireRate;                  
                             }                                     
@@ -480,3 +509,33 @@ Basic.prototype.place = function(x,y){
     }
     Inmovable.prototype = Object.create(Basic.prototype);
     Inmovable.constructor = Inmovable;
+
+    function PickUp(game,x,y,key,amount){
+        
+        PickUp.apply(this,[game,x,y,key]);
+        this.amount = amount; //Amount of healing/money/keys
+        
+    }
+    PickUp.prototype = Object.create(Basic.prototype);
+    PickUp.constructor = PickUp;
+
+
+    function Treasure(game,x,y,key,loot){
+        
+        Inmovable.apply(this,[game,x,y,key]);
+        this.loot = loot;
+    }
+    Treasure.prototype = Object.create(Inmovable.prototype);
+    Treasure.constructor = Treasure;
+
+    Treasure.prototype.looted = function(obj){
+        
+        if(obj.doorKeys > 0){
+            
+            obj.doorKeys--;
+            this.loot.reset(this.x,this.y-10);
+            this.kill();
+        }
+        
+
+    }

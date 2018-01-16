@@ -376,16 +376,13 @@ Basic.prototype.place = function(x,y){
                             this.animations.play('up');
                         }
                     }
-                }
-
-               
+                }         
                 MeleeEnemy.prototype.update = function(){
                     if(this.hp > 0){
                         this.movement();
                     }
                     else this.kill();
                 }//The update of the class
-
 
             //Range Enemy
                 function RangeEnemy(game,x,y,key,speed,hp,damage,target,bulletPool){
@@ -462,25 +459,25 @@ Basic.prototype.place = function(x,y){
                                 
                                 if (this.x > this.target.x && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
                                     this.animations.play('shoot'); 
-                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'left')
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+50,this.bulletSpeed,'left')
                                     this.bulletPool[0]++    
                                     
                                 }
                                 if (this.x < this.target.x  && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
                                     this.animations.play('shoot');
-                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'right') 
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+50,this.bulletSpeed,'right') 
                                     this.bulletPool[0]++  
                                                               
                                 } 
                                 if(this.y > this.target.y && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){
                                     this.animations.play('shoot');
-                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'up') 
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+50,this.bulletSpeed,'up') 
                                     this.bulletPool[0]++  
                                                                                                    
                                 } 
                                 if(this.y < this.target.y  && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){   
                                     this.animations.play('shoot');
-                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'down') 
+                                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+50,this.bulletSpeed,'down') 
                                     this.bulletPool[0]++    
                                            
                                 }
@@ -539,3 +536,69 @@ Basic.prototype.place = function(x,y){
         
 
     }
+
+
+ //Wall Enemy
+ function WallEnemy(game,x,y,key,speed,hp,damage,target,bulletPool){
+    Enemy.apply(this,[game,x,y,key,speed,hp,/*target,*/damage])
+    this.target = target;
+
+    this.moveFlag = true;
+    this.bulletTimer=0;
+    this.bulletSpeed = 2.5;
+    this.FireRate = 1000;
+    this.i = 0;
+    this.bulletPool = bulletPool;
+    this.inRange = false;
+}
+
+WallEnemy.prototype = Object.create(Enemy.prototype)
+WallEnemy.constructor = WallEnemy 
+
+//Functions
+    WallEnemy.prototype.movement = function(){
+        if(this.target.x > (this.x + 10))  this.body.velocity.x = this.speed*40;
+        else if(this.target.x < (this.x - 10))  this.body.velocity.x = -this.speed*40;
+        else this.body.velocity.x = 0;
+    }
+    WallEnemy.prototype.shoot = function(){
+        {
+            if(this.game.time.now > this.bulletTimer){
+                
+                if(this.bulletPool[0] >= 10) this.bulletPool[0]  = 0;
+                
+                if (this.x > this.target.x && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
+                   
+                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'left')
+                    this.bulletPool[0]++    
+                    
+                }
+                if (this.x < this.target.x  && ((this.y-20) <= this.target.y)&& ((this.y+20) >= this.target.y)){
+                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'right') 
+                    this.bulletPool[0]++  
+                                              
+                } 
+                if(this.y > this.target.y && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){
+                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'up') 
+                    this.bulletPool[0]++  
+                                                                                   
+                } 
+                if(this.y < this.target.y  && ((this.x-20) <= this.target.x)&& ((this.x+20) >= this.target.x)){   
+                    this.bulletPool[1][this.bulletPool[0]].resete(this.x,this.y+5,this.bulletSpeed,'down') 
+                    this.bulletPool[0]++    
+                           
+                }
+                this.bulletTimer = this.game.time.now + this.FireRate;                  
+            }                                     
+        }
+    }
+
+    WallEnemy.prototype.update = function(){
+        if(this.hp > 0){
+            this.movement();
+            this.shoot();
+        }
+        else this.kill();
+    }//The update of the class
+
+//heritage

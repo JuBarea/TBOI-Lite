@@ -222,9 +222,10 @@ var gameState = {
         head.place(-9,-35);
 
         this.enemies = []
-        this.enemies[0] = new RangeEnemy(this.game,670,210,'turretEnemy',0,3,1,this.player,this.enemybulletPool)
+        this.enemies[0] = new RangeEnemy(this.game,600,150,'turretEnemy',0,3,1,this.player,this.enemybulletPool)
         this.enemies[1] = new MeleeEnemy(this.game,400,400,'isaac',4,3,1,this.player)
         this.enemies[2] = new RangeEnemy(this.game,150,190,'babyEnemy',2,3,1,this.player,this.enemybulletPool)
+        this.enemies[3] = new WallEnemy(this.game,125,125,'poop',2,3,1,this.player,this.enemybulletPool)
 
 
         
